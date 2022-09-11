@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct NewsView: View {
-    var body: some View {
-        @StateObject private var model = NewsViewModel()
-        
+    @StateObject private var model = NewsViewModel()
+
         var body: some View {
             List(model.stories.indices) { index in
                 if let story = model.stories[index] {
@@ -19,9 +18,10 @@ struct NewsView: View {
             }
             .navigationTitle("News")
             .onAppear(perform: model.fetchTopStories)
+ 
         }
     }
-}
+
 
 
 struct Story: View {
@@ -30,8 +30,14 @@ struct Story: View {
     let footnote: String
     let score: String
     let commentCount: String
+    let url: URL
+    let article: Item
     
     var body: some View {
+        NavigationLink{
+            ReadingView(urlToDisplay:  article.url)
+        } label: {
+       
         HStack(alignment: .top, spacing: 16.0) {
             Position(position: position)
             VStack(alignment: .leading, spacing: 8.0) {
@@ -52,7 +58,9 @@ struct Story: View {
             }
         }
         .padding(.top, 16.0)
+   
     }
+}
 }
 
 
@@ -65,6 +73,8 @@ extension Story {
         footnote = item.url.formatted
             + " - \(item.date.timeAgo)"
             + " - by \(item.author)"
+        url = item.url
+        article = item
     }
 }
 
